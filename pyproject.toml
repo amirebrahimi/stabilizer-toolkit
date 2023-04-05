@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "stabilizer-toolkit"
 version = "0.1.0"
-description = "A toolkit for working with the stabilizer formalism: states, rank, decompositions, etc."
+description = "A toolkit for working with the stabilizer formalism: stabilizer states, rank, decompositions, etc."
 authors = ["Amir Ebrahimi <github@aebrahimi.com>"]
 license = "Apache-2.0"
 readme = "README.md"
@@ -9,8 +9,23 @@ packages = [{include = "stabilizer_toolkit"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+numpy = "^1.24.2"
+stabilizer-states = { version = "^0.1", optional = true }
 
+[tool.poetry.extras]
+states = ["stabilizer-states"]
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+debugpy = "1.6.4"
+jupyterlab = "^3.6.2"
+black = {extras = ["d", "jupyter"], version = "^23.1.0"}
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
