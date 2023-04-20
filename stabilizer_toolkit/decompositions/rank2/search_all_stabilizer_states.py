@@ -10,6 +10,9 @@ from psutil import cpu_count
 from ray import remote
 from tqdm import tqdm
 
+from stabilizer_toolkit.decompositions.validate import get_decomposition
+from stabilizer_toolkit.helpers.ray import initialize_ray
+
 try:
     from stabilizer_states import StabilizerStates
 except ImportError:
@@ -48,21 +51,7 @@ def search_all_stabilizer_states(
     if debug:
         print(f"Number of stabilizer states: {num_states}")
 
-    ray_implicit_init = not ray.is_initialized()
-    if ray_implicit_init:
-        if num_cpus == 0:
-            num_cpus = cpu_count(logical=False)
-        elif num_cpus < 0:
-            num_cpus = cpu_count(logical=False) - num_cpus
-
-        ray.init(
-            num_cpus=num_cpus,
-            _system_config={
-                # Allow spilling until the local disk is 99% utilized.
-                # This only affects spilling to the local file system.
-                "local_fs_capacity_threshold": 0.99,
-            },
-        )
+    ray_implicit_init, num_cpus = initialize_ray(num_cpus)
 
     psi_ref = ray.put(psi)
     states_ref = ray.put(states)
@@ -76,15 +65,10 @@ def search_all_stabilizer_states(
         for j in range(start_j, start_j + range_j):
             count += 1
             b = states[j]
-            A = np.vstack([a, b]).T
-            x, _, _, _ = np.linalg.lstsq(A, psi, rcond=-1)
-            if np.all(np.isclose(A @ x, psi)):
-                if debug:
-                    print(f"Found decomposition:\n  {a}\n  {b}")
-
-                # return A.T, x
-                decompositions.append(A.T)
-                coefficients.append(x)
+            decomposition, coefficient = get_decomposition(psi, a, b, debug=debug)
+            if decomposition is not None and coefficient is not None:
+                decompositions.append(decomposition)
+                coefficients.append(coefficient)
 
         return decompositions, coefficients, count
 

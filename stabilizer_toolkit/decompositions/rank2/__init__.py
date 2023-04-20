@@ -3,3 +3,4 @@
 #
 
 from .search_all_stabilizer_states import search_all_stabilizer_states
+from .ternary_search import ternary_search

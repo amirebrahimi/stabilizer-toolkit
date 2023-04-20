@@ -3,4 +3,4 @@
 #
 
 from . import rank2
-from .validate import validate_decomposition
+from .validate import validate_decomposition, validate_decompositions
