@@ -13,6 +13,8 @@ numpy = "^1.23,<1.24"
 stabilizer-states = { version = "^0.1.1", optional = true }
 tqdm = "^4.65.0"
 cirq = { version = "^1.1.0", optional = true }
+ray = "^2.3.1"
+psutil = "^5.9.5"
 
 [tool.poetry.extras]
 states = ["stabilizer-states"]

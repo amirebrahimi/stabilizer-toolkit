@@ -15,7 +15,7 @@ except ImportError:
 
 def get_tensored_unitary(*gates) -> npt.NDArray:
     if cirq:
-        print(gates)
+        # print(gates)
         return reduce(
             np.kron,
             [
