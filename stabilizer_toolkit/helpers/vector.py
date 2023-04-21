@@ -9,3 +9,10 @@ def normalize(v):
     if norm == 0:
         return v
     return v / norm
+
+
+def to_tuple(v):
+    try:
+        return tuple(to_tuple(i) for i in v)
+    except TypeError:
+        return v
