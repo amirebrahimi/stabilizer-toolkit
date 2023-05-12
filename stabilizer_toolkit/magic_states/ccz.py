@@ -10,6 +10,12 @@ from stabilizer_toolkit.helpers.unitary import get_tensored_unitary
 from stabilizer_toolkit.helpers.vector import to_tuple, normalize
 
 
+def bin_array(num, m):
+    """Convert a positive integer num into an m-bit bit vector"""
+    # From https://stackoverflow.com/a/47521145
+    return np.array(list(np.binary_repr(num).zfill(m))).astype(np.int8)
+
+
 def ccz_circuit_matrix(num_qubits: int):
     # Get all the ways to place a CCZ on n qubits
     ccz_indices = list(combinations(range(num_qubits), 3))
@@ -30,12 +36,12 @@ def distinct_circuits(num_qubits: int):
         return A[:, order]  # sort in descending order
 
     A = ccz_circuit_matrix(num_qubits)
-    columns = A.shape[1]
+    num_columns = A.shape[1]
 
     # Iterate through all the combinations of CCZs
     unique_circuits = set()
-    for i in range(2**columns):
-        x = np.array(list(np.binary_repr(i).zfill(columns))).astype(np.int8)  # https://stackoverflow.com/a/47521145
+    for i in range(2**num_columns):
+        x = bin_array(i, num_columns)
         C = A @ np.diag(x)  # this selects the CCZs from the overall array
         C = C[:, ~np.all(C == 0, axis=0)]  # remove all 0 columns
 
@@ -63,16 +69,14 @@ def enumerate_ccz(num_qubits: int):
     plus = normalize(reduce(np.kron, [np.array([1, 1])] * num_qubits))
 
     for circuit_index, circuit in distinct_circuits(num_qubits):
-        # Iterate over each of the columns (i.e. CCZs) and build up the unitary
         cczs = np.ones((2**num_qubits,))
-        for c in circuit.T:
-            # This is the index where a Z (-1 phase) would be applied (e.g. CCZ on bottom three qubits is index 7)
-            z_index = np.packbits(c[::-1], bitorder="little")
-            print(z_index, c)
-            cczs[z_index] *= -1
-        # This may still not be right and may require setting a -1 among odd numbers of groups of CCZs when all qubits
-        # are set.
-        cczs[-1] = (-1) ** circuit.shape[1]
+
+        # Iterate through all possible states and determine phase for that state
+        for i in range(2**num_qubits):
+            x = bin_array(i, num_qubits)
+            num_cczs = np.count_nonzero(x.T @ circuit == 3)
+            cczs[i] *= (-1) ** num_cczs
+
         D = np.diag(cczs)
         state = D @ plus
         yield circuit_index, state, D, circuit
