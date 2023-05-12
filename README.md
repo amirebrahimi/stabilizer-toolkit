@@ -3,7 +3,7 @@
 
 This Python package is a toolkit that can help with the analysis of multi-qubit magic states (e.g. their rank and 
 related decompositions). The code originated to support the research for my Master's Thesis at UT Austin: 
-[CCZ Magic](ccz_magic.pdf)
+[CCZ Magic](ccz_magic.pdf).
 
 ## Usage
 
@@ -18,7 +18,7 @@ decompositions, coeffs = rank2.search_all_stabilizer_states(CCZ, S3)
 validate_decompositions(CCZ, decompositions, coeffs)
 ```
 
-For more examples look at the example [notebooks](notebooks).
+For more usage take a look at the example [notebooks](notebooks).
 
 ## Installation
 The package is available on [pypi](https://pypi.org/project/stabilizer-toolkit/) and installable via `pip`:
