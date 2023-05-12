@@ -65,7 +65,7 @@ def search_all_stabilizer_states(
         for j in range(start_j, start_j + range_j):
             count += 1
             b = states[j]
-            decomposition, coefficient = get_decomposition(psi, a, b, debug=debug)
+            decomposition, coefficient = get_decomposition(psi, a, b, normalize_states=True, debug=debug)
             if decomposition is not None and coefficient is not None:
                 decompositions.append(decomposition)
                 coefficients.append(coefficient)

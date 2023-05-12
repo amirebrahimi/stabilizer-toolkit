@@ -216,12 +216,12 @@ def ternary_search(
                         # neg_subset = -subset
                         # yield neg_subset[:,np.newaxis] + doubled_states
                         # yield neg_subset[:,np.newaxis] - doubled_states
-                        # doubled_subset = 2 * subset
-                        # yield doubled_subset[:,np.newaxis] + filtered_states
-                        # yield doubled_subset[:,np.newaxis] - filtered_states
+                        doubled_subset = 2 * subset
+                        yield doubled_subset[:, np.newaxis] + block
+                        yield doubled_subset[:, np.newaxis] - block
                         # neg_doubled_subset = -doubled_subset
-                        # yield neg_doubled_subset[:,np.newaxis] + filtered_states
-                        # yield neg_doubled_subset[:,np.newaxis] - filtered_states
+                        # yield neg_doubled_subset[:,np.newaxis] + block
+                        # yield neg_doubled_subset[:,np.newaxis] - block
 
                     pairs = []
                     for summed in second_checks():
