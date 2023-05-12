@@ -5,6 +5,12 @@ This Python package is a toolkit that can help with the analysis of multi-qubit 
 related decompositions). The code originated to support the research for my Master's Thesis at UT Austin: 
 [CCZ Magic](ccz_magic.pdf).
 
+#### Abstract
+Universal quantum computation can be achieved with a gate set that includes a generating set of Clifford gates and at least one non-Clifford gate. When it comes to classically simulating quantum computation, Clifford gates generate an important class of circuits known as stabilizer circuits, which are efficiently simulable. Stabilizer simulators can be extended to support universal quantum computation by using magic state injection gadgets and magic state decomposition. The computational scaling directly relates to the exact stabilizer rank, χ, of the magic state, which is the minimum number of stabilizer states in superposition that are necessary to represent the state.
+
+We show that decompositions of Clifford magic states of the form |D⟩ = D|+⟩^{⊗n}, where D is a diagonal circuit composed of `Z`, `CZ`, and `CCZ` gates, have χ = 2 for n ≤ 5. We also establish that all `CCZ` circuits of n ≤ 5 qubits are Clifford equivalent to k ≤ 2 `CCZ` circuits. These results provide a new lower-bound for the complexity of simulating Clifford+`CCZ` circuits in general. We suggest the use of a state-injection gadget of |D⟩ in contrast to the naïve approach of multiple state-injection gadgets of individual |CCZ⟩ states. Since extended stabilizer simulators have a gadget-based method of simulation, this approach can improve classical simulation of quantum computation when using a Clifford+`CCZ` gate set.
+
+
 ## Usage
 
 ```python
@@ -29,12 +35,12 @@ pip install stabilizer-toolkit
 You may also want to install the optional [stabilizer-states](https://pypi.org/project/stabilizer-states/) package, 
 which provides the stabilizer datasets for n <= 6, then you can install with the `states` extras:
 ```shell
-pip install stabilizer-toolkit[states] 
+pip install "stabilizer-toolkit[states]" 
 ```
 
 There are also additional helpers that require the use of additional libraries, so you may also want to install those:
 ```shell
-pip install stabilizer-toolkit[states,helpers] 
+pip install "stabilizer-toolkit[states,helpers]" 
 ```
 
 ## Development
